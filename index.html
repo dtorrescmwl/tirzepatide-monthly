@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+</head>
+<body>
+    <p>Creating checkout session...</p>
+    
+    <script>
+        const ORG = 'cmwl';
+        const CHECKOUT_URI = 'https://cmwl.portals.care/checkouts/';
+        const PRODUCT_ID = '6717b5946a2fc2a2500998dd'; // Tirzepatide Monthly $349
+        
+        const myHeaders = new Headers();
+        myHeaders.append('organization', ORG);
+        myHeaders.append('Content-Type', 'application/json');
+        
+        const raw = JSON.stringify([{
+            quantity: 1,
+            productId: PRODUCT_ID
+        }]);
+        
+        fetch('https://public-api.portals.care/v2/carts', {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw
+        })
+        .then(res => res.json())
+        .then(data => {
+            window.location.href = CHECKOUT_URI + data._id + '?start=signup';
+        })
+        .catch(error => {
+            document.body.innerHTML = '<p>Error: ' + error.message + '</p>';
+        });
+    </script>
+</body>
+</html>
